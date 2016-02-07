@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="amuse">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="Apache Tomcat v8.0 [Apache Tomcat v8.0].libraryclasspath">
+        <pathelement location="${env.CATALINA_HOME}/lib/annotations-api.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/catalina-ant.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/catalina-ha.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/apache-tomcat-8.0.26/lib/catalina-storeconfig.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/catalina-tribes.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/catalina.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/ecj-4.4.2.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/el-api.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/jasper-el.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/jasper.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/jsp-api.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/servlet-api.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-api.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-coyote.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-dbcp.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-i18n-es.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-i18n-fr.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-i18n-ja.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-jdbc.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-jni.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-util-scan.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-util.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/tomcat-websocket.jar"/>
+        <pathelement location="${env.CATALINA_HOME}/lib/websocket-api.jar"/>
+    </path>
+    <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/commons-dbcp2-2.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-pool2-2.4.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/gson-2.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/postgresql-9.4-1205.jdbc4.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-beans-4.2.3.RELEASE.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-context-4.2.3.RELEASE.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-core-4.2.3.RELEASE.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-expression-4.2.3.RELEASE.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-jdbc-4.2.3.RELEASE.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/spring-web-4.2.3.RELEASE.jar"/>
+    </path>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="amuse.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Apache Tomcat v8.0 [Apache Tomcat v8.0].libraryclasspath"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+        <delete dir="${env.CATALINA_HOME}/webapps/${ant.project.name}"/>
+        <delete file="${env.CATALINA_HOME}/webapps/${ant.project.name}.war"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac encoding="ISO-8859-1" debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="amuse.classpath"/>
+        </javac>
+        <jar destfile="${ant.project.name}.jar" basedir="build/classes"/>
+        <copy file="${ant.project.name}.jar" todir="WebContent/WEB-INF/lib"/>
+    </target>
+    <target depends="build-project" name="war-project">
+        <war destfile="${ant.project.name}.war" webxml="WebContent/WEB-INF/web.xml">
+            <lib dir="WebContent/WEB-INF/lib"/>
+        </war>
+        <copy file="${ant.project.name}.war" todir="${env.CATALINA_HOME}/webapps"/>
+        <delete file="${ant.project.name}.jar"/>
+        <delete file="${ant.project.name}.war"/>
+    </target>
+    <target depends="cleanall, build-project, war-project" name="build"/>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <antcall target="build"/>
+    </target>
+</project>
