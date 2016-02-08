@@ -58,11 +58,9 @@ public final class UserDTO {
 					pstat.setString(3, Boolean.toString((Boolean)content));
 				else
 					pstat.setString(3, Integer.toString((Integer)content));
-				Array cerdits = con.createArrayOf("VARCHAR", indicator.getCredits());
-				pstat.setArray(4, cerdits);
+				pstat.setString(4, indicator.getCredits());
 				pstat.setBoolean(5, indicator.isVisible());
 				pstat.addBatch();
-				cerdits.free();
 			}
 			pstat.executeBatch();
 			con.commit();
@@ -119,7 +117,7 @@ public final class UserDTO {
 				} else {
 					indicators[count].setContent(indicators[count].isVisible() ? Integer.parseInt(rs.getString("status")) : -2);
 				}
-				indicators[count].setCredits((String[])rs.getArray("credibility").getArray());
+				indicators[count].setCredits(rs.getString("credibility"));
 			}
 			
 			rs.close();
