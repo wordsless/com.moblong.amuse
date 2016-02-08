@@ -58,7 +58,7 @@ public final class UserDTO {
 					pstat.setString(3, Boolean.toString((Boolean)content));
 				else
 					pstat.setString(3, Integer.toString((Integer)content));
-				pstat.setString(4, indicator.getCredits());
+				pstat.setBoolean(4, indicator.isCredited());
 				pstat.setBoolean(5, indicator.isVisible());
 				pstat.addBatch();
 			}
@@ -117,7 +117,7 @@ public final class UserDTO {
 				} else {
 					indicators[count].setContent(indicators[count].isVisible() ? Integer.parseInt(rs.getString("status")) : -2);
 				}
-				indicators[count].setCredits(rs.getString("credibility"));
+				indicators[count].setCredited(rs.getBoolean("credibility"));
 			}
 			
 			rs.close();
