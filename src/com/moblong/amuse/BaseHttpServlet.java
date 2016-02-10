@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

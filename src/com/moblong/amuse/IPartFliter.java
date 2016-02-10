@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 public interface IPartFliter<T> {
 

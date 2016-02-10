@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,10 +18,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.huabao.amuse.dto.AccountDTO;
-import com.huabao.amuse.dto.DeviceDTO;
-import com.huabao.flipped.model.Account;
-import com.huabao.flipped.model.Device;
+import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.DeviceDTO;
+import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="register", name ="register", urlPatterns = "/RegisterAnonymous")

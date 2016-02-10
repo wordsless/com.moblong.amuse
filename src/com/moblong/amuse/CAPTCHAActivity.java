@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import javax.servlet.http.HttpServlet;
 

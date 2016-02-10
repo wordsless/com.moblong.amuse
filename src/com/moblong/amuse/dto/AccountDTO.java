@@ -1,4 +1,4 @@
-package com.huabao.amuse.dto;
+package com.moblong.amuse.dto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.huabao.flipped.model.Account;
+import com.moblong.flipped.model.Account;
 
 public final class AccountDTO {
 

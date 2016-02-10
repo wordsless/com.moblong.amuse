@@ -1,4 +1,4 @@
-package com.huabao.amuse.dto;
+package com.moblong.amuse.dto;
 
 import java.sql.Array;
 import java.sql.Connection;
@@ -12,8 +12,8 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.huabao.flipped.model.Indicator;
-import com.huabao.flipped.model.User;
+import com.moblong.flipped.model.Indicator;
+import com.moblong.flipped.model.User;
 
 public final class UserDTO {
 
@@ -51,7 +51,7 @@ public final class UserDTO {
 			for(Indicator indicator : indicators) {
 				pstat.setString(1, user.getUid());
 				pstat.setString(2, indicator.getTitle());
-				Object content = indicator.getContent();
+				Object content = indicator.getStatus();
 				if(content instanceof String)
 					pstat.setString(3, (String)content);
 				else if(content instanceof Boolean)
@@ -111,11 +111,11 @@ public final class UserDTO {
 				indicators[count].setTitle(rs.getString("title"));
 				indicators[count].setVisible(rs.getBoolean("visible"));
 				if(indicators[count].getTitle().equals("城市")||indicators[count].getTitle().equals("全名")) {
-					indicators[count].setContent(indicators[count].isVisible() ? rs.getString("status") : "保密");
+					indicators[count].setStatus(indicators[count].isVisible() ? rs.getString("status") : "保密");
 				} else if(indicators[count].getTitle().equals("性别")) {
-					indicators[count].setContent(Boolean.parseBoolean(rs.getString("status")));
+					indicators[count].setStatus(Boolean.parseBoolean(rs.getString("status")));
 				} else {
-					indicators[count].setContent(indicators[count].isVisible() ? Integer.parseInt(rs.getString("status")) : -2);
+					indicators[count].setStatus(indicators[count].isVisible() ? Integer.parseInt(rs.getString("status")) : -2);
 				}
 				indicators[count].setCredited(rs.getBoolean("credibility"));
 			}

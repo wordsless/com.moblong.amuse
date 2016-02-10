@@ -1,4 +1,4 @@
-package com.huabao.amuse.dto;
+package com.moblong.amuse.dto;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

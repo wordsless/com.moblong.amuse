@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.huabao.amuse.dto.AccountDTO;
-import com.huabao.flipped.model.Account;
+import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.flipped.model.Account;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="Register New Account", name ="RegisterNewAccount", urlPatterns = "/RegisterNewAccount")

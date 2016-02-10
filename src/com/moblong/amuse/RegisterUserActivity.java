@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,10 +15,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.huabao.amuse.dto.AccountDTO;
-import com.huabao.amuse.dto.UserDTO;
-import com.huabao.flipped.model.Account;
-import com.huabao.flipped.model.User;
+import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.UserDTO;
+import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.User;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="register user", name ="SubmitUserDetails", urlPatterns = "/SubmitUserDetails")

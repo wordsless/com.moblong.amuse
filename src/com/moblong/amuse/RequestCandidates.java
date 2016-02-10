@@ -1,4 +1,4 @@
-package com.huabao.amuse;
+package com.moblong.amuse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,8 +16,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.huabao.amuse.dto.AccountDTO;
-import com.huabao.flipped.model.Account;
+import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.flipped.model.Account;
 
 @WebServlet(displayName="RequestCandidates", name ="RequestCandidates", urlPatterns = "/RequestCandidates")
 public final class RequestCandidates extends BaseHttpServlet {
