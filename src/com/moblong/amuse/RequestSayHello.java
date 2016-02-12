@@ -16,7 +16,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
 @SuppressWarnings("serial")
-@WebServlet(displayName="RequestIndicator", name ="RequestIndicator", urlPatterns = "/RequestIndicator")
+@WebServlet(displayName="RequestSayHello", name ="RequestSayHello", urlPatterns = "/RequestSayHello")
 public final class RequestSayHello extends HttpServlet {
 
 	@Override
