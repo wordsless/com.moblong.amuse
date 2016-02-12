@@ -33,12 +33,12 @@ public final class RequestSayHello extends HttpServlet {
 		channel = con.createChannel();
 	    channel.queueDeclare(aid, false, false, false, null);
 	    channel.basicPublish("", aid, null, msg.getBytes("UTF-8"));
-	    try {
+	    /*try {
 			channel.close();
 		} catch (TimeoutException e) {
 			e.printStackTrace();
 		}
-	    channel = null;
+	    channel = null;*/
 	}
 
 }
