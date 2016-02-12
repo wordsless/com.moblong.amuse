@@ -40,7 +40,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean name="DeviceDTO" class="com.huabao.amuse.dto.DeviceDTO" />
-	<bean name="AccountDTO" class="com.huabao.amuse.dto.AccountDTO" />
-	<bean name="UserDTO" class="com.huabao.amuse.dto.UserDTO" />
+	<bean name="DeviceDTO" class="com.moblong.amuse.dto.DeviceDTO" />
+	<bean name="AccountDTO" class="com.moblong.amuse.dto.AccountDTO" />
+	<bean name="UserDTO" class="com.moblong.amuse.dto.UserDTO" />
 </beans>
