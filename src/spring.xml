@@ -10,7 +10,7 @@
 
 	<!-- RabbitMQ Connection池 -->
 	<bean id="RabbitConnectionPool" class="com.moblong.amuse.RabbitConnectionPool"/>
-
+	
 	<bean id="ds" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />
