@@ -26,29 +26,51 @@ public class SavePictureActivity extends BaseHttpServlet{
 	}
 	
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		ApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-		String CACHE = context.getBean("CACHE", String.class);
-		InputStream input = request.getInputStream();
+		String CACHE = context.getBean("cache", String.class);
 		String pictureName = UUID.randomUUID().toString().replace("-", "");
-		byte[] data = read(input);
-		File picture = new File(CACHE, pictureName);
-		if(!picture.exists())
-			picture.createNewFile();
-		
-		OutputStream output = new FileOutputStream(picture);
-		output.write(data);
-		output.flush();
-		output.close();
-		
-		input.close();
-		input = null;
-		
-		PrintWriter print = response.getWriter();
-		print.write(pictureName);
-		print.flush();
-		print.close();
-		print = null;
+		InputStream input = null;
+		PrintWriter print = null;
+		try {
+			input = request.getInputStream();
+			byte[] data = read(input);
+			File picture = new File(CACHE, pictureName);
+			if(!picture.exists()) {
+				picture.createNewFile();
+				picture.setReadable(true);
+				picture.setWritable(true);
+			}
+			OutputStream output = new FileOutputStream(picture);
+			output.write(data);
+			output.flush();
+			output.close();
+			
+			input.close();
+			input = null;
+			
+			print = response.getWriter();
+			print.write(pictureName);
+			print.flush();
+			print.close();
+			print = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				input = null;
+			}
+			
+			if(print != null) {
+				print.close();
+				print = null;
+			}
+		}
 	}
 
 }

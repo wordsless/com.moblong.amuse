@@ -28,7 +28,8 @@ public final class RequestCandidates extends BaseHttpServlet {
 		final Gson gson = new GsonBuilder()
 				  .setDateFormat("yyyy-MM-dd HH:mm:ss")
 				  .create();
-		String aid = req.getParameter("aid");
+		String aid  = req.getParameter("aid");
+		String page = req.getParameter("page");
 		PrintWriter writer = null;
 		try {
 			resp.setCharacterEncoding("UTF-8");
@@ -36,7 +37,7 @@ public final class RequestCandidates extends BaseHttpServlet {
 			writer = resp.getWriter();
 			if(aid != null) {
 				AccountDTO dto = context.getBean("AccountDTO", AccountDTO.class);
-				List<Account> accounts = dto.candidate(context, aid, 0);
+				List<Account> accounts = dto.candidate(context, aid, Integer.parseInt(page));
 				writer.write(gson.toJson(accounts));
 				writer.close();
 				writer = null;
