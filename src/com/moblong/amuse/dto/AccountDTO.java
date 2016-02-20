@@ -15,7 +15,7 @@ import com.moblong.flipped.model.Account;
 
 public final class AccountDTO {
 
-	private static final int MAX = 20;
+	private static final int NUMBER_OF_PER_PAGE = 20;
 
 	public void save(final ApplicationContext context, final String uid, final String pwd, final Account account) {
 		Connection con = null;
@@ -186,12 +186,13 @@ public final class AccountDTO {
 		PreparedStatement pstat = null;
 		ResultSet rs = null;
 		DataSource ds = context.getBean("ds", DataSource.class);
+		int index = page * NUMBER_OF_PER_PAGE;
 		try {
 			con = ds.getConnection();
-			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE aid <> ? AND LENGTH(alias) > 0 AND page > ? AND page < ?");//匿名注册时也会有account id，但是alias为NULL
+			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE aid <> ? AND LENGTH(alias) > 0 AND page >= ? AND page < ?");//匿名注册时也会有account id，但是alias为NULL
 			pstat.setString(1, aid);
-			pstat.setInt(2, page);
-			pstat.setInt(3, page + MAX);
+			pstat.setInt(2, index);
+			pstat.setInt(3, index + NUMBER_OF_PER_PAGE);
 			pstat.execute();
 			rs = pstat.getResultSet();
 			while(rs.next()) {

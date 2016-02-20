@@ -22,7 +22,7 @@ import com.moblong.flipped.model.User;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="register user", name ="SubmitUserDetails", urlPatterns = "/SubmitUserDetails")
-public final class RegisterUserActivity  extends BaseHttpServlet {
+public final class RegisterUserActivity  extends BasicServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException {

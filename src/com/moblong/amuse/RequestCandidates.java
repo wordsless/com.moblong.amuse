@@ -20,7 +20,7 @@ import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.flipped.model.Account;
 
 @WebServlet(displayName="RequestCandidates", name ="RequestCandidates", urlPatterns = "/RequestCandidates")
-public final class RequestCandidates extends BaseHttpServlet {
+public final class RequestCandidates extends BasicServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
@@ -50,6 +50,4 @@ public final class RequestCandidates extends BaseHttpServlet {
 			e.printStackTrace();
 		}
 	}
-
-	
 }

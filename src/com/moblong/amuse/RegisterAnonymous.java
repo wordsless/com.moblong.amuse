@@ -3,12 +3,10 @@ package com.moblong.amuse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +15,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.amuse.dto.DeviceDTO;
 import com.moblong.flipped.model.Account;
@@ -25,7 +22,7 @@ import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="register", name ="register", urlPatterns = "/RegisterAnonymous")
-public final class RegisterAnonymous extends BaseHttpServlet {
+public final class RegisterAnonymous extends BasicServlet {
 
 	@Override
 	protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)

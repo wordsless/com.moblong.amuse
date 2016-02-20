@@ -18,7 +18,7 @@ import com.moblong.flipped.model.Account;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="Register New Account", name ="RegisterNewAccount", urlPatterns = "/RegisterNewAccount")
-public final class RegisterNewAccount extends BaseHttpServlet {
+public final class RegisterNewAccount extends BasicServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException {

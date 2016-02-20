@@ -18,7 +18,7 @@ import com.moblong.flipped.model.User;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="RequestIndicator", name ="RequestIndicator", urlPatterns = "/RequestIndicator")
-public final class RequestIndicator extends BaseHttpServlet {
+public final class RequestIndicator extends BasicServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
