@@ -1,4 +1,4 @@
-package com.moblong.amuse;
+package com.moblong.amuse.utils;
 
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.ObjectPool;

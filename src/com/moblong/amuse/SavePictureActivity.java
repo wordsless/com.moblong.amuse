@@ -51,7 +51,7 @@ public class SavePictureActivity extends BasicServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		ApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
-		String cache = context.getBean("cache", String.class);
+		File cache = context.getBean("cache", File.class);
 		//生成图片名称
 		final String pictureName = UUID.randomUUID().toString().replace("-", "");
 		

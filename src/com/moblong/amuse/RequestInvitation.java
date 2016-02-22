@@ -14,7 +14,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.moblong.amuse.utils.RabbitConnectionPool;
 import com.moblong.flipped.model.Message;
 
 import com.rabbitmq.client.Channel;

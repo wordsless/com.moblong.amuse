@@ -1,52 +1,72 @@
 package com.moblong.amuse;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.context.ApplicationContext;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.moblong.amuse.dto.MaterialDTO;
-import com.moblong.amuse.utils.SavePicture;
-import com.moblong.amuse.utils.SecurityReaderAndWirter;
-import com.moblong.flipped.model.Multiparty;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="SaveMaterials", name ="SaveMaterials", urlPatterns = "/SaveMaterials")
 public final class SaveMaterialsActivity extends BasicServlet {
 
+	private Map<String, String> parse(final String text) {
+		Map<String, String> params = new HashMap<String, String>();
+		char[] cbuf = text.toCharArray();
+		StringBuilder sbuf = new StringBuilder();
+		String key = null, value = null;
+		for(char c : cbuf) {
+			switch(c) {
+			case '=':
+				key = sbuf.toString();
+				sbuf.delete(0, key.length() - 1);
+				break;
+			case '&':
+				value = sbuf.toString();
+				sbuf.delete(0, value.length() - 1);
+				params.put(key, value);
+				break;
+			default:
+				sbuf.append(c);
+			}
+		}
+		return params;
+	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Gson gson = new GsonBuilder()
-				    .setDateFormat("yyyy-MM-dd HH:mm:ss")
-				    .create();
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		MaterialDTO materialDTO = context.getBean("MaterialDTO", MaterialDTO.class);
-		SecurityReaderAndWirter reader = new SecurityReaderAndWirter();
-		SavePicture saver = new SavePicture("/webdav/static/image");
-		String aid = req.getParameter("aid");
-		List<Multiparty> multiparties = gson.fromJson(reader.read(req.getInputStream()), new TypeToken<List<Multiparty>>(){}.getType());
-		for(Multiparty multiparty : multiparties) {
-			String pid = UUID.randomUUID().toString().replace("-", "");
-			byte[] data = Base64.decodeBase64(multiparty.getValue());
-			InputStream input = new ByteArrayInputStream(data);
-			saver.save(pid, input);
-			input.close();
-			input = null;
-			String typed = multiparty.getParam("typed");
-			materialDTO.save(context, aid, typed, pid);
+		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		DiskFileItemFactory factory = context.getBean("fileItemFactory", DiskFileItemFactory.class);
+		
+		if(ServletFileUpload.isMultipartContent(req)) {
+			ServletFileUpload uploader = new ServletFileUpload(factory);
+			try {
+				List<FileItem> items = uploader.parseRequest(req);
+				for(FileItem item : items) {
+					if(item.isFormField()) {
+						
+					} else {
+						String text = item.getFieldName();
+						Map<String, String> params = parse(text);
+						
+					}
+				}
+			} catch (FileUploadException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

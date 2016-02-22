@@ -6,9 +6,10 @@
 		<title>Insert title here</title>
 	</head>
 	<body>
-		<form action="RequestCandidates" method="post">
+		<form action="SaveMaterials" method="post" enctype="multipart/form-data">
 			<input name="aid" type="text"/>
 			<input name="page" type="text"/>
+			<input name="picture" type="file"/>
 			<input type="submit" value="提交">
 		</form>
 	</body>

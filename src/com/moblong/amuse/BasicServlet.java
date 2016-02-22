@@ -4,15 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public abstract class BasicServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 4109972672240022385L;
 	
 	protected final Gson gson = new GsonBuilder()
 			  				    .setDateFormat("yyyy-MM-dd HH:mm:ss")
