@@ -2,6 +2,7 @@ package com.moblong.amuse;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,11 +65,15 @@ public final class SaveMaterialsActivity extends BasicServlet {
 				for(int index = 0; index < items.size(); index++) {
 					String uid = UUID.randomUUID().toString().replace("-", "");
 					FileItem picture = items.get(index);
-					FileItem  aid = items.get(++index);
-					FileItem type = items.get(++index);
-					FileItem desc = items.get(++index);
-					//System.out.println(String.format("1st=%s:%s, 2rd=%s:%s, 3th=%s:%s, 4th=%s:%s", picture.getName(), picture.getFieldName(), aid.getName(), aid.getFieldName(), type.getName(), type.getFieldName(), desc.getName(), desc.getFieldName()));
-					picture.write(new File(cache, uid));
+					FileItem 	 aid = items.get(++index);
+					FileItem	type = items.get(++index);
+					FileItem	desc = items.get(++index);
+					
+					File bin = new File(cache, uid);
+					if(bin.exists())
+						bin.delete();
+					bin.createNewFile();
+					picture.write(bin);
 					materialsDTO.save(context, uid, aid.getString("utf-8"), type.getString("utf-8"), desc.getString("utf-8"));
 				}
 			} catch (FileUploadException e) {
@@ -77,6 +82,11 @@ public final class SaveMaterialsActivity extends BasicServlet {
 				e.printStackTrace();
 			}
 		}
+		
+		PrintWriter writer = resp.getWriter();
+		writer.write("OK");
+		writer.close();
+		writer = null;
 	}
 
 }

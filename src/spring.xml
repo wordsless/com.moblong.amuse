@@ -57,5 +57,5 @@
 	<bean name="DeviceDTO"	 class="com.moblong.amuse.dto.DeviceDTO"/>
 	<bean name="AccountDTO"	 class="com.moblong.amuse.dto.AccountDTO"/>
 	<bean name="UserDTO"	 class="com.moblong.amuse.dto.UserDTO"/>
-	<bean name="MaterialDTO" class="com.moblong.amuse.dto.MaterialDTO"/>
+	<bean name="MaterialsDTO" class="com.moblong.amuse.dto.MaterialsDTO"/>
 </beans>
