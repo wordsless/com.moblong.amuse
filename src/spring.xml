@@ -12,13 +12,17 @@
         <constructor-arg index="0" value="/webdav/static/image"/>
     </bean>
     
+   <bean id="temp" class="java.io.File">
+        <constructor-arg index="0" value="/webdav/data/temp"/>
+    </bean>
+    
     <bean id="threshold" class="java.lang.Integer">
         <constructor-arg index="0" value="81920"/>
     </bean>
     
     <bean id="fileItemFactory" class="org.apache.commons.fileupload.disk.DiskFileItemFactory">
         <constructor-arg index="0" ref="threshold"/>
-        <constructor-arg index="1" ref="cache"/>
+        <constructor-arg index="1" ref="temp"/>
     </bean>
     
 	<!-- RabbitMQ Connection池 -->

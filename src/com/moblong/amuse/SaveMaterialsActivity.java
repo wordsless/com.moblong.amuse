@@ -1,9 +1,12 @@
 package com.moblong.amuse;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,11 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.moblong.amuse.dto.MaterialsDTO;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="SaveMaterials", name ="SaveMaterials", urlPatterns = "/SaveMaterials")
@@ -47,20 +53,23 @@ public final class SaveMaterialsActivity extends BasicServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		DiskFileItemFactory factory = context.getBean("fileItemFactory", DiskFileItemFactory.class);
-		
+		//DiskFileItemFactory factory = context.getBean("fileItemFactory", DiskFileItemFactory.class);
+		File cache = context.getBean("cache", File.class);
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		MaterialsDTO materialsDTO = context.getBean("MaterialsDTO", MaterialsDTO.class);
 		if(ServletFileUpload.isMultipartContent(req)) {
 			ServletFileUpload uploader = new ServletFileUpload(factory);
 			try {
 				List<FileItem> items = uploader.parseRequest(req);
-				for(FileItem item : items) {
-					if(item.isFormField()) {
-						
-					} else {
-						String text = item.getFieldName();
-						Map<String, String> params = parse(text);
-						
-					}
+				for(int index = 0; index < items.size(); index++) {
+					String uid = UUID.randomUUID().toString().replace("-", "");
+					FileItem picture = items.get(index);
+					FileItem  aid = items.get(++index);
+					FileItem type = items.get(++index);
+					FileItem desc = items.get(++index);
+					//System.out.println(String.format("1st=%s:%s, 2rd=%s:%s, 3th=%s:%s, 4th=%s:%s", picture.getName(), picture.getFieldName(), aid.getName(), aid.getFieldName(), type.getName(), type.getFieldName(), desc.getName(), desc.getFieldName()));
+					picture.write(new File(cache, uid));
+					materialsDTO.save(context, uid, aid.getString("utf-8"), type.getString("utf-8"), desc.getString("utf-8"));
 				}
 			} catch (FileUploadException e) {
 				e.printStackTrace();
