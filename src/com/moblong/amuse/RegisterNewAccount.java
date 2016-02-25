@@ -14,7 +14,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.DeviceDTO;
 import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="Register New Account", name ="RegisterNewAccount", urlPatterns = "/RegisterNewAccount")
@@ -31,6 +33,11 @@ public final class RegisterNewAccount extends BasicServlet {
 			Account       account = gson.fromJson(new String(data, "UTF-8"), Account.class);
 			AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
 			accountDTO.update(context, account);
+			
+			DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
+			Device device = deviceDTO.reload(context, account.getId());
+			deviceDTO.setPhone(context, device.getDeviceID(), account.getTelephone());
+			
 			writer.write("OK");
 			writer.flush();
 			writer.close();

@@ -30,8 +30,8 @@ public final class RegisterAnonymous extends BasicServlet {
 		
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		
-		final Gson    gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-		final String  aid  = UUID.randomUUID().toString().replace("-", "");
+		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		final String aid  = UUID.randomUUID().toString().replace("-", "");
 		
 		Account account = gson.fromJson(req.getParameter("account"), Account.class);
 		account.setId(aid);
@@ -40,7 +40,7 @@ public final class RegisterAnonymous extends BasicServlet {
 		account.setSignature("TA什么都没有留下！");
 		
 		AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
-		accountDTO.save(context, req.getParameter("password"), UUID.randomUUID().toString().replace("-", ""), account);
+		accountDTO.save(context, UUID.randomUUID().toString().replace("-", ""), req.getParameter("password"), account);
 		
 		Device  device  = gson.fromJson(req.getParameter("device"), Device.class);
 		DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);

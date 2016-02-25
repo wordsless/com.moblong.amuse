@@ -134,7 +134,7 @@ public final class AccountDTO {
 		DataSource 			 ds = context.getBean("ds", DataSource.class);
 		try {
 			con = ds.getConnection();
-			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE telephone == ? AND pwd = ?");
+			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE telephone = ? AND pwd = ?");
 			pstat.setString(1, telephone);
 			pstat.setString(2, pwd);
 			pstat.execute();
@@ -313,14 +313,16 @@ public final class AccountDTO {
 		try {
 			con   = ds.getConnection();
 			if(account.getPpid() == null) {
-				pstat = con.prepareStatement("UPDATE t_account_base SET alias = ?, signature = ? WHERE aid = ?");
+				pstat = con.prepareStatement("UPDATE t_account_base SET alias = ?, signature = ?, telephone = ? WHERE aid = ?");
 				pstat.setString(1, account.getAlias());
 				pstat.setString(2, account.getSignature());
-				pstat.setString(3, account.getId());
+				pstat.setString(3, account.getTelephone());
+				pstat.setString(4, account.getId());
 			} else {
-				pstat = con.prepareStatement("UPDATE t_account_base SET alias = ?, signature = ?, ppid = ? WHERE aid = ?");
+				pstat = con.prepareStatement("UPDATE t_account_base SET alias = ?, signature = ?, telephone = ?, ppid = ? WHERE aid = ?");
 				pstat.setString(1, account.getAlias());
 				pstat.setString(2, account.getSignature());
+				pstat.setString(3, account.getTelephone());
 				pstat.setString(3, account.getPpid());
 				pstat.setString(4, account.getId());
 			}

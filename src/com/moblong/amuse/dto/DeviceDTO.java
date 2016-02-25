@@ -83,8 +83,78 @@ public final class DeviceDTO {
 		}
 	}
 	
-	public final Device reload() {
+	public void setPhone(final ApplicationContext context, final String did, final String phone) {
+		Connection          con = null;
+		PreparedStatement pstat = null;
+		DataSource ds = context.getBean("ds", DataSource.class);
+		try {
+			con = ds.getConnection();
+			con.setAutoCommit(false);
+			pstat = con.prepareStatement("UPDATE t_device_base SET phone = ? WHERE did = ?");
+			pstat.setString(1, phone);
+			pstat.setString(2, did);
+			pstat.execute();
+			con.commit();
+			pstat.close();
+			pstat = null;
+			con.close();
+			con = null;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			
+			if(pstat != null) {
+				try {
+					pstat.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				pstat = null;
+			}
+			
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				con = null;
+			}
+		}
+	}
+	
+	public final Device reload(final ApplicationContext context, final String aid) {
 		Device device = null;
+		Connection          con = null;
+		ResultSet            rs = null;
+		PreparedStatement pstat = null;
+		DataSource ds = context.getBean("ds", DataSource.class);
+		try {
+			con = ds.getConnection();
+			con.setAutoCommit(false);
+			pstat = con.prepareStatement("SELECT aid, did, manufacture, model, phone, platform, release FROM t_device_base WHERE aid = ?");
+			pstat.setString(1, aid);
+			pstat.execute();
+			rs = pstat.getResultSet();
+			if(rs.next()) {
+				device = new Device();
+				device.setDeviceID(rs.getString("did"));
+				device.setManufacture(rs.getString("manufacture"));
+				device.setModel(rs.getString("model"));
+				device.setPhone(rs.getString("phone"));
+				device.setPlatform(rs.getString("platform"));
+				device.setRelease(rs.getString("release"));
+			}
+			con.commit();
+			rs.close();
+			rs = null;
+			pstat.close();
+			pstat = null;
+			con.close();
+			con = null;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return device;
 	}
 }
