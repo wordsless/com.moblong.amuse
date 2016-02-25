@@ -126,6 +126,68 @@ public final class AccountDTO {
 		return account;
 	}
 	
+	public Account signIn(final ApplicationContext context, final String telephone, final String pwd) {
+		Account		    account = null;
+		Connection			con = null;
+		PreparedStatement pstat = null;
+		ResultSet			 rs = null;
+		DataSource 			 ds = context.getBean("ds", DataSource.class);
+		try {
+			con = ds.getConnection();
+			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE telephone == ? AND pwd = ?");
+			pstat.setString(1, telephone);
+			pstat.setString(2, pwd);
+			pstat.execute();
+			rs = pstat.getResultSet();
+			if(rs.next()) {
+				account = new Account();
+				account.setId(rs.getString("aid"));
+				account.setAlias(rs.getString("alias"));
+				account.setTelephone(rs.getString("telphone"));
+				account.setRegistered(new java.util.Date(rs.getDate("registered").getTime()));
+				account.setLast(new java.util.Date(rs.getDate("lastest").getTime()));
+				account.setSignature(rs.getString("signature"));
+				account.setPpid(rs.getString("ppid"));
+			}
+			rs.close();
+			rs = null;
+			pstat.close();
+			pstat = null;
+			con.close();
+			con = null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				rs = null;
+			}
+			
+			if(pstat != null) {
+				try {
+					pstat.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				pstat = null;
+			}
+			
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				con = null;
+			}
+		}
+		return account;
+	}
+	
 	public String lookforUserId(final ApplicationContext context, final String aid) {
 		String				uid = null;
 		Connection			con = null;
