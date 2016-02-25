@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,8 @@ import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.flipped.model.Account;
 
+@SuppressWarnings("serial")
+@WebServlet(displayName="SignIn", name ="SignIn", urlPatterns = "/SignIn")
 public final class SignInActivity extends HttpServlet {
 	
 	private final Gson gson = new GsonBuilder()
