@@ -1,6 +1,7 @@
 package com.moblong.amuse;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -27,19 +28,19 @@ public final class SignInActivity extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String phone = req.getParameter("phone");
-		String pwd   = req.getParameter("pwd");
+		String cellphone = req.getParameter("phone");
+		String password  = req.getParameter("pwd");
 		
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
-		Account account = accountDTO.signIn(context, phone, pwd);
+		Account account = accountDTO.signIn(context, cellphone, password);
 		
-		PrintWriter writer = resp.getWriter();
+		OutputStream writer = resp.getOutputStream();
 		if(account != null) {
-			writer.print(gson.toJson(account).getBytes("utf8"));
+			writer.write(gson.toJson(account).getBytes("utf8"));
 			writer.flush();
 		} else {
-			writer.print("NONE".getBytes("utf8"));
+			writer.write("NONE".getBytes("utf8"));
 			writer.flush();
 		}
 		writer.close();
