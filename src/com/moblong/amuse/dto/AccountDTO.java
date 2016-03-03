@@ -102,7 +102,7 @@ public final class AccountDTO {
 		DataSource 			 ds = context.getBean("ds", DataSource.class);
 		try {
 			con = ds.getConnection();
-			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE aid == ?");
+			pstat = con.prepareStatement("SELECT * FROM t_account_base WHERE aid = ?");
 			pstat.setString(1, aid);
 			pstat.execute();
 			rs = pstat.getResultSet();
@@ -441,6 +441,41 @@ public final class AccountDTO {
 				pstat = null;
 			}
 			
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				con = null;
+			}
+		}
+	}
+
+	public void delete(ApplicationContext context, String aid) {
+		Connection			con = null;
+		PreparedStatement pstat = null;
+		DataSource			 ds = context.getBean("ds", DataSource.class);
+		try {
+			con = ds.getConnection();
+			PreparedStatement pstate = con.prepareStatement("DELETE FROM t_account_base WHERE aid = ?");
+			pstate.setString(1, aid);
+			pstate.execute();
+			pstate.close();
+			pstate = null;
+			con.close();
+			con = null;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(pstat != null) {
+				try {
+					pstat.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				pstat = null;
+			}
 			if(con != null) {
 				try {
 					con.close();
