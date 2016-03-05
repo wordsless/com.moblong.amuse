@@ -114,7 +114,7 @@ public final class AccountDTO {
 				account.setRegistered(new java.util.Date(rs.getDate("registered").getTime()));
 				account.setLast(new java.util.Date(rs.getDate("lastest").getTime()));
 				account.setSignature(rs.getString("signature").trim());
-				account.setPpid(rs.getString("ppid").trim());
+				account.setAvatar(rs.getString("ppid").trim());
 			}
 			rs.close();
 			rs = null;
@@ -176,7 +176,7 @@ public final class AccountDTO {
 				account.setRegistered(new java.util.Date(rs.getDate("registered").getTime()));
 				account.setLast(new java.util.Date(rs.getDate("lastest").getTime()));
 				account.setSignature(rs.getString("signature").trim());
-				account.setPpid(rs.getString("ppid").trim());
+				account.setAvatar(rs.getString("ppid").trim());
 			}
 			rs.close();
 			rs = null;
@@ -293,7 +293,7 @@ public final class AccountDTO {
 				candidate.setRegistered(new java.util.Date(rs.getDate("registered").getTime()));
 				candidate.setLast(new java.util.Date(rs.getDate("lastest").getTime()));
 				candidate.setSignature(rs.getString("signature").trim());
-				candidate.setPpid(rs.getString("ppid").trim());
+				candidate.setAvatar(rs.getString("ppid").trim());
 				candidates.add(candidate);
 			}
 			rs.close();
@@ -341,7 +341,7 @@ public final class AccountDTO {
 		DataSource			 ds = context.getBean("ds", DataSource.class);
 		try {
 			con   = ds.getConnection();
-			if(account.getPpid() == null) {
+			if(account.getAvatar() == null) {
 				pstat = con.prepareStatement("UPDATE t_account_base SET alias = ?, signature = ?, telephone = ?, pwd = ? WHERE aid = ?");
 				
 				String alias = account.getAlias();
@@ -408,7 +408,7 @@ public final class AccountDTO {
 					pstat.setString(4, null);
 				}
 				
-				String ppid = account.getPpid();
+				String ppid = account.getAvatar();
 				if(ppid != null) {
 					pstat.setString(5, ppid.trim());
 				} else {
