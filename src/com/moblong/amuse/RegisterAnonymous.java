@@ -21,7 +21,7 @@ import com.moblong.flipped.model.Account;
 import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
-@WebServlet(displayName="register", name ="register", urlPatterns = "/RegisterAnonymous")
+@WebServlet(displayName="RegisterAnonymous", name ="RegisterAnonymous", urlPatterns = "/RegisterAnonymous")
 public final class RegisterAnonymous extends BasicServlet {
 
 	@Override
