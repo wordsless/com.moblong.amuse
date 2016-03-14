@@ -2,6 +2,7 @@ package com.moblong.amuse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.UserDTO;
-import com.moblong.flipped.model.User;
+import com.moblong.flipped.model.DetailsItem;
 
 @SuppressWarnings("serial")
 @WebServlet(displayName="RequestIndicator", name ="RequestIndicator", urlPatterns = "/RequestIndicator")
@@ -29,14 +30,14 @@ public final class RequestIndicator extends BasicServlet {
 		final String aid = req.getParameter("aid");
 		final UserDTO userDTO = context.getBean("UserDTO", UserDTO.class);
 		final String uid = userDTO.lookfor(context, aid);
-		final User user = userDTO.reload(context, uid);
+		final List<DetailsItem<?>> user = userDTO.reload(context, uid);
 		
 		PrintWriter writer = null;
 		try {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json; charset=UTF-8");
 			writer = resp.getWriter();
-			writer.write(gson.toJson(user.getIndicators()));
+			writer.write(gson.toJson(user));
 			writer.close();
 			writer = null;
 		} catch (IOException e) {

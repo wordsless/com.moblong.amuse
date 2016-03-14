@@ -5,19 +5,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
+import com.moblong.flipped.model.DetailsItem;
 import com.moblong.flipped.model.Indicator;
-import com.moblong.flipped.model.User;
 
 public final class UserDTO {
 
-	public void save(final ApplicationContext context, final User user) {
+	public void save(final ApplicationContext context, final String uid, final List<DetailsItem<?>> user) {
 		boolean			  exist = false;
 		ResultSet			 rs = null;
 		Connection			con = null;
@@ -26,8 +28,8 @@ public final class UserDTO {
 		try {
 			con = ds.getConnection();
 			con.setAutoCommit(false);
-			pstat = con.prepareStatement("SELECT COUNT(1) FROM t_user_indicator WHERE uid = ?");
-			pstat.setString(1, user.getUid());
+			pstat = con.prepareStatement("SELECT COUNT(1) FROM t_details_base WHERE uid = ?");
+			pstat.setString(1, uid);
 			pstat.execute();
 			rs = pstat.getResultSet();
 			if(rs.next()) {
@@ -39,27 +41,19 @@ public final class UserDTO {
 			pstat = null;
 			
 			if(exist) {
-				pstat = con.prepareStatement("DELETE FROM t_user_indicator WHERE uid = ?");
-				pstat.setString(1, user.getUid());
+				pstat = con.prepareStatement("DELETE FROM t_details_base WHERE uid = ?");
+				pstat.setString(1, uid);
 				pstat.execute();
 				pstat.close();
 				pstat = null;
 			}
 			
-			pstat = con.prepareStatement("INSERT INTO t_user_indicator(uid, title, content, credibility, visible) VALUES(?, ?, ?, ?, ?)");
-			Indicator[] indicators = user.getIndicators();
-			for(Indicator indicator : indicators) {
-				pstat.setString(1, user.getUid());
-				pstat.setString(2, indicator.getTitle());
-				Object content = indicator.getStatus();
-				if(content instanceof String)
-					pstat.setString(3, (String)content);
-				else if(content instanceof Boolean)
-					pstat.setString(3, Boolean.toString((Boolean)content));
-				else
-					pstat.setString(3, Integer.toString((Integer)content));
-				pstat.setBoolean(4, indicator.isCredited());
-				pstat.setBoolean(5, indicator.isVisible());
+			pstat = con.prepareStatement("INSERT INTO t_details_base(uid, iid, title, content, condition) VALUES(?, ?, ?, ?, ?)");
+			for(DetailsItem<?> item : user) {
+				pstat.setString(1, uid);
+				pstat.setInt(2, item.getIid());
+				pstat.setString(4, item.getTitle());
+				pstat.setInt(5, item.getCondition());
 				pstat.addBatch();
 			}
 			pstat.executeBatch();
@@ -92,34 +86,23 @@ public final class UserDTO {
 		}
 	}
 	
-	public User reload(final ApplicationContext context, final String uid) {
-		User user = null;
+	public List<DetailsItem<?>> reload(final ApplicationContext context, final String uid) {
+		List<DetailsItem<?>> user = null;
 		Connection con = null;
 		PreparedStatement pstat = null;
 		ResultSet rs = null;
 		DataSource ds = context.getBean("ds", DataSource.class);
 		try {
-			user = new User();
+			user = new ArrayList<DetailsItem<?>>(10);
 			con = ds.getConnection();
-			pstat = con.prepareStatement("SELECT title, status, credibility, visible FROM t_user_indicator WHERE uid = ?");
+			pstat = con.prepareStatement("SELECT uid, iid, title, content, condition FROM t_details_base WHERE uid = ?");
 			pstat.setString(1, uid);
 			pstat.execute();
 			rs = pstat.getResultSet();
-			Indicator[] indicators = user.getIndicators();
-			int count = 0;
 			while(rs.next()) {
-				indicators[count].setTitle(rs.getString("title"));
-				indicators[count].setVisible(rs.getBoolean("visible"));
-				if(indicators[count].getTitle().equals("城市")||indicators[count].getTitle().equals("全名")) {
-					indicators[count].setStatus(indicators[count].isVisible() ? rs.getString("status") : "保密");
-				} else if(indicators[count].getTitle().equals("性别")) {
-					indicators[count].setStatus(Boolean.parseBoolean(rs.getString("status")));
-				} else {
-					indicators[count].setStatus(indicators[count].isVisible() ? Integer.parseInt(rs.getString("status")) : -2);
-				}
-				indicators[count].setCredited(rs.getBoolean("credibility"));
+				int iid = rs.getInt("iid");
+				user.add(new DetailsItem<String>(iid, rs.getString("title"), rs.getString("content"), rs.getInt("condition")));
 			}
-			
 			rs.close();
 			rs = null;
 			pstat.close();
@@ -159,7 +142,7 @@ public final class UserDTO {
 		return user;
 	}
 	
-	public void delete(final ApplicationContext context, final User user) {
+	public void delete(final ApplicationContext context, final String uid) {
 		Connection con = null;
 		PreparedStatement pstat = null;
 		try {
@@ -167,7 +150,7 @@ public final class UserDTO {
 			con = ds.getConnection();
 			con.setAutoCommit(false);
 			pstat = con.prepareStatement("DELETE FROM t_user_indicator WHERE uid = ?");
-			pstat.setString(1, user.getUid());
+			pstat.setString(1, uid);
 			pstat.execute();
 			con.commit();
 			pstat.close();
