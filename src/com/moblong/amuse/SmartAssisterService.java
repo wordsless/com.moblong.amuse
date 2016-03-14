@@ -10,6 +10,8 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
+import org.postgis.java2d.PGShapeGeometry;
+
 import com.moblong.flipped.model.Account;
 
 public final class SmartAssisterService {
@@ -76,7 +78,21 @@ public final class SmartAssisterService {
 	}	
 	
 	private void nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
-		String sql = "SELECT aid, ST_Distance(?, location) as distance FROM t_location_realtime WHERE aid <> ? ORDER BY distance LIMIT 1000";
+		String sql = "SELECT base.aid, base.alias, base.signature, nearby.distance FROM t_account_base AS base, (SELECT aid, ST_Distance('POINT(? ?)', location) as distance FROM t_location_realtime WHERE aid <> ? ORDER BY distance LIMIT 1000) nearby WHERE base.aid = nearby.aid";
+		DataSource ds = context.getBean("ds", DataSource.class);
+		Connection con = null;
+		PreparedStatement pstate = null;
+		try {
+			con = ds.getConnection();
+			con.setAutoCommit(false);
+			pstate = con.prepareStatement(sql);
+			pstate.setDouble(1, latitude);
+			pstate.setDouble(2, longitude);
+			pstate.setString(3, aid);
+			pstate.execute();
+		} catch(SQLException ex) {
+			
+		}
 	}
 	
 	public void onUpdate(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
