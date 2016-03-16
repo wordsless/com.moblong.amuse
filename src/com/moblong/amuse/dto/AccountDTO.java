@@ -177,6 +177,8 @@ public final class AccountDTO {
 				account.setLast(new java.util.Date(rs.getDate("lastest").getTime()));
 				account.setSignature(rs.getString("signature").trim());
 				account.setAvatar(rs.getString("ppid").trim());
+				account.setType(rs.getString("type"));
+				account.setUid(rs.getString("uid"));
 			}
 			rs.close();
 			rs = null;
