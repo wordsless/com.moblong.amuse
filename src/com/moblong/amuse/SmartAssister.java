@@ -1,5 +1,10 @@
 package com.moblong.amuse;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,23 +16,43 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.moblong.amuse.dto.UserDTO;
 import com.moblong.flipped.model.Account;
 import com.moblong.flipped.model.DetailsItem;
 
-public final class SmartAssisterService {
+public final class SmartAssister {
 	
-	public void init() {
-		List<IFilter<List<DetailsItem<?>>>> filters = new ArrayList<IFilter<List<DetailsItem<?>>>>();
-		//城市过滤器
-		filters.add(new IFilter<List<DetailsItem<?>>>() {
-
-			@Override
-			public boolean filte(List<DetailsItem<?>> account) {
-				return false;
+	public List<ITendentiousFilter<DetailsItem<?>>> load(final ApplicationContext context, final String aid) {
+		List<ITendentiousFilter<DetailsItem<?>>> tendencies = null;
+		File cache = new File(context.getBean("tendency", File.class), aid);
+		BufferedReader reader = null;
+		try {
+			Gson gson = new Gson();
+			reader = new BufferedReader(new FileReader(cache));
+			String json = reader.readLine();
+			reader.close();
+			reader = null;
+			tendencies = gson.fromJson(json, new TypeToken<ITendentiousFilter<?>>(){}.getType());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				reader = null;
 			}
-			
-		});
+		}
+		return tendencies;
 	}
 	
 	private void update(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
@@ -79,8 +104,21 @@ public final class SmartAssisterService {
 		}
 	}	
 	
-	private List<Account> nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude, final double radius) {
-		String sql = "SELECT base.aid, base.alias, base.telephone, base.registered, base.lastest, base.signature, base.ppid, base.type, base.uid, nearby.distance FROM t_account_base AS base, (SELECT aid, ST_Distance('POINT(? ?)', location) as distance FROM t_location_realtime WHERE aid <> ? AND distance <= ? ORDER BY distance LIMIT 1000) nearby WHERE base.aid = nearby.aid";
+	public List<Account> nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude, final double radius) {
+		String sql = "SELECT "
+				+ "base.aid, "
+				+ "base.alias, "
+				+ "base.telephone, "
+				+ "base.registered, "
+				+ "base.lastest, "
+				+ "base.signature, "
+				+ "base.ppid, "
+				+ "base.type, "
+				+ "base.uid, "
+				+ "nearby.distance "
+				+ "FROM "
+				+ "t_account_base AS base, "
+				+ "(SELECT aid, ST_Distance('POINT(? ?)', location)as distance FROM t_location_realtime WHERE aid <> ? AND distance <= ? ORDER BY distance LIMIT 1000) AS nearby WHERE base.aid = nearby.aid";
 		List<Account> nearby = new ArrayList<Account>();
 		DataSource ds = context.getBean("ds", DataSource.class);
 		Connection con = null;
@@ -151,13 +189,13 @@ public final class SmartAssisterService {
 		return nearby;
 	}
 	
-	public void filter(final ApplicationContext context, final List<Account> nearby, final List<IFilter<List<DetailsItem<?>>>> filters) {
+	public void filter(final ApplicationContext context, final List<Account> nearby, final List<ITendentiousFilter<?>> filters) {
 		final UserDTO userDTO = context.getBean("UserDTO", UserDTO.class);
 		for(Account account : nearby) {
 			int c = 0;
 			List<DetailsItem<?>> user = userDTO.reload(context, account.getUid());
-			for(IFilter<List<DetailsItem<?>>> filter : filters) {
-				if(!filter.filte(user))
+			for(DetailsItem item : user) {
+				if(filters.get(item.getIid()).filte(item))
 					break;
 				++c;
 			}
