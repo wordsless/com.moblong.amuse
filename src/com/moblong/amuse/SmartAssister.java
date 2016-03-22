@@ -105,20 +105,7 @@ public final class SmartAssister {
 	}	
 	
 	public List<Account> nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude, final double radius) {
-		String sql = "SELECT "
-				+ "base.aid, "
-				+ "base.alias, "
-				+ "base.telephone, "
-				+ "base.registered, "
-				+ "base.lastest, "
-				+ "base.signature, "
-				+ "base.ppid, "
-				+ "base.type, "
-				+ "base.uid, "
-				+ "nearby.distance "
-				+ "FROM "
-				+ "t_account_base AS base, "
-				+ "(SELECT aid, ST_Distance('POINT(? ?)', location)as distance FROM t_location_realtime WHERE aid <> ? AND distance <= ? ORDER BY distance LIMIT 1000) AS nearby WHERE base.aid = nearby.aid";
+		String sql = "SELECT base.aid, base.alias, base.telephone, base.registered, base.lastest, base.signature, base.ppid, base.type, base.uid, nearby.distance FROM t_account_base AS base, (SELECT aid, ST_Distance('POINT(? ?)', location) AS distance FROM t_location_realtime WHERE aid <> ? AND distance <= ? ORDER BY distance LIMIT 1000) AS nearby WHERE base.aid = nearby.aid";
 		List<Account> nearby = new ArrayList<Account>();
 		DataSource ds = context.getBean("ds", DataSource.class);
 		Connection con = null;

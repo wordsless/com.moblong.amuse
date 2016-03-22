@@ -11,6 +11,10 @@
 	<bean id="cache" class="java.io.File">
 		<constructor-arg index="0" value="/webdav/static/image" />
 	</bean>
+	
+	<bean id="tendencies" class="java.io.File">
+		<constructor-arg index="0" value="/webdav/static/tendencies" />
+	</bean>
 
 	<bean id="temp" class="java.io.File">
 		<constructor-arg index="0" value="/webdav/data/temp" />
