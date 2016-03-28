@@ -38,8 +38,8 @@ public final class RequestCandidates extends BasicServlet {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json; charset=UTF-8");
 			writer = resp.getOutputStream();
-			SmartAssister assister = context.getBean("smartAssister", SmartAssister.class);
-			List<Account> candidates = assister.nearby(context, aid, latitude, longitude, 1000);
+			GeographyDTO geographyDTO = context.getBean("GeographyDTO", GeographyDTO.class);
+			List<Account>  candidates = geographyDTO.nearby(context, aid, latitude, longitude, 1000);
 			for(Account candidate : candidates) {
 				List<VerifiableItem> details = detailsDTO.reload(context, candidate.getUid());
 				candidate.setDetails(details);

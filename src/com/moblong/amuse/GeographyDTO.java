@@ -1,10 +1,5 @@
 package com.moblong.amuse;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,14 +11,9 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
-import com.moblong.amuse.dto.DetailsDTO;
 import com.moblong.flipped.model.Account;
-import com.moblong.flipped.model.VerifiableItem;
 
-public final class SmartAssister {
+public final class GeographyDTO {
 	
 	private void update(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
 		DataSource  ds = context.getBean("ds", DataSource.class);
