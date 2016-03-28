@@ -1,25 +1,23 @@
 package com.moblong.amuse.dto;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.moblong.flipped.model.DetailsItem;
+import com.moblong.flipped.model.Constants;
 import com.moblong.flipped.model.Indicator;
+import com.moblong.flipped.model.VerifiableItem;
 
-public final class UserDTO {
+public final class DetailsDTO {
 
-	public void save(final ApplicationContext context, final String uid, final List<DetailsItem<?>> user) {
+	public void save(final ApplicationContext context, final String uid, final List<VerifiableItem> details) {
 		boolean			  exist = false;
 		ResultSet			 rs = null;
 		Connection			con = null;
@@ -49,11 +47,20 @@ public final class UserDTO {
 			}
 			
 			pstat = con.prepareStatement("INSERT INTO t_details_base(uid, iid, title, content, condition) VALUES(?, ?, ?, ?, ?)");
-			for(DetailsItem<?> item : user) {
+			for(VerifiableItem item : details) {
+				Indicator<?> indicator = item.getIndicator();
 				pstat.setString(1, uid);
-				pstat.setInt(2, item.getIid());
-				pstat.setString(4, item.getTitle());
-				pstat.setInt(5, item.getCondition());
+				pstat.setInt(2, indicator.getId());
+				pstat.setString(3, indicator.getTitle());
+				if(indicator.getId() == Constants.INDEX_CITY || indicator.getId() == Constants.INDEX_FULLNAME) {
+					pstat.setString(4, (String) indicator.getContent());
+				} else if(indicator.getId() == Constants.INDEX_SEX) {
+					pstat.setString(4, Boolean.toString((Boolean) indicator.getContent()));
+				} else {
+					pstat.setString(4, Integer.toString((Integer) indicator.getContent()));
+				}
+				pstat.setInt(5, indicator.isVisible() ? 1 : 0);
+				pstat.setInt(6, item.isVerified() ? 1 : 0);
 				pstat.addBatch();
 			}
 			pstat.executeBatch();
@@ -86,14 +93,14 @@ public final class UserDTO {
 		}
 	}
 	
-	public List<DetailsItem<?>> reload(final ApplicationContext context, final String uid) {
-		List<DetailsItem<?>> user = null;
+	public List<VerifiableItem> reload(final ApplicationContext context, final String uid) {
+		List<VerifiableItem> user = null;
 		Connection con = null;
 		PreparedStatement pstat = null;
 		ResultSet rs = null;
 		DataSource ds = context.getBean("ds", DataSource.class);
 		try {
-			user = new ArrayList<DetailsItem<?>>(10);
+			user = new ArrayList<VerifiableItem>(10);
 			con = ds.getConnection();
 			pstat = con.prepareStatement("SELECT uid, iid, title, content, condition FROM t_details_base WHERE uid = ?");
 			pstat.setString(1, uid);
@@ -101,7 +108,12 @@ public final class UserDTO {
 			rs = pstat.getResultSet();
 			while(rs.next()) {
 				int iid = rs.getInt("iid");
-				user.add(new DetailsItem<String>(iid, rs.getString("title"), rs.getString("content"), rs.getInt("condition")));
+				if(iid == Constants.INDEX_CITY || iid == Constants.INDEX_FULLNAME)
+					user.add(new VerifiableItem(new Indicator<String>(iid, rs.getString("title"), rs.getString("content")), rs.getInt("condition") > 0));
+				else if(iid == Constants.INDEX_SEX)
+					user.add(new VerifiableItem(new Indicator<Boolean>(iid, rs.getString("title"), Boolean.parseBoolean(rs.getString("content"))), rs.getInt("condition") > 0));
+				else
+					user.add(new VerifiableItem(new Indicator<Integer>(iid, rs.getString("title"), Integer.parseInt(rs.getString("content"))), rs.getInt("condition") > 0));
 			}
 			rs.close();
 			rs = null;

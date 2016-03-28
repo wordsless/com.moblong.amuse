@@ -19,41 +19,11 @@ import org.springframework.context.ApplicationContext;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.moblong.amuse.dto.UserDTO;
+import com.moblong.amuse.dto.DetailsDTO;
 import com.moblong.flipped.model.Account;
-import com.moblong.flipped.model.DetailsItem;
+import com.moblong.flipped.model.VerifiableItem;
 
 public final class SmartAssister {
-	
-	public List<ITendentiousFilter<DetailsItem<?>>> load(final ApplicationContext context, final String aid) {
-		List<ITendentiousFilter<DetailsItem<?>>> tendencies = null;
-		File cache = new File(context.getBean("tendency", File.class), aid);
-		BufferedReader reader = null;
-		try {
-			Gson gson = new Gson();
-			reader = new BufferedReader(new FileReader(cache));
-			String json = reader.readLine();
-			reader.close();
-			reader = null;
-			tendencies = gson.fromJson(json, new TypeToken<ITendentiousFilter<?>>(){}.getType());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (JsonSyntaxException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if(reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				reader = null;
-			}
-		}
-		return tendencies;
-	}
 	
 	private void update(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
 		DataSource  ds = context.getBean("ds", DataSource.class);
@@ -174,25 +144,6 @@ public final class SmartAssister {
 		}
 		
 		return nearby;
-	}
-	
-	public void filter(final ApplicationContext context, final List<Account> nearby, final List<ITendentiousFilter<?>> filters) {
-		final UserDTO userDTO = context.getBean("UserDTO", UserDTO.class);
-		for(Account account : nearby) {
-			int c = 0;
-			List<DetailsItem<?>> user = userDTO.reload(context, account.getUid());
-			for(DetailsItem item : user) {
-				if(filters.get(item.getIid()).filte(item))
-					break;
-				++c;
-			}
-			if(c < filters.size())
-				nearby.remove(account);
-		}
-	}
-	
-	public void onUpdate(final ApplicationContext context, final String aid, final double latitude, final double longitude) {
-		update(context, aid, latitude, longitude);
 	}
 	
 }
