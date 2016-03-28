@@ -14,6 +14,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.moblong.amuse.utils.RabbitConnectionPool;
 import com.moblong.flipped.model.Whistle;
 
@@ -31,9 +32,9 @@ public final class RequestInvitation extends HttpServlet {
 		Gson gson = new GsonBuilder()
 				    .setDateFormat("yyyy-MM-dd HH:mm:ss")
 				    .create();
-		Whistle message = null;
+		Whistle<String> message = null;
 		if(msg != null)
-			message = gson.fromJson(msg, Whistle.class);
+			message = gson.fromJson(msg, new TypeToken<Whistle<String>>(){}.getType());
 		
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		

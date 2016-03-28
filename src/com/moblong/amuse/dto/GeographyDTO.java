@@ -1,4 +1,4 @@
-package com.moblong.amuse;
+package com.moblong.amuse.dto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

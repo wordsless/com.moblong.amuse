@@ -3,6 +3,7 @@
 	<name>amuse</name>
 	<comment></comment>
 	<projects>
+		<project>com.moblong.models</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

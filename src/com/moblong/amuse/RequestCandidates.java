@@ -15,6 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.DetailsDTO;
+import com.moblong.amuse.dto.GeographyDTO;
 import com.moblong.flipped.model.Account;
 import com.moblong.flipped.model.VerifiableItem;
 
