@@ -46,8 +46,8 @@ public final class RequestInvitation extends HttpServlet {
 	    try {
 	    	con = factory.newConnection();
 			channel = con.createChannel();
-		    channel.queueDeclare(message.getTarget(), false, false, false, null);
-		    channel.basicPublish("", message.getTarget(), null, msg.getBytes("UTF-8"));
+		    channel.queueDeclare(message.getRecipient(), false, false, false, null);
+		    channel.basicPublish("", message.getRecipient(), null, msg.getBytes("UTF-8"));
 			channel.close();
 			channel = null;
 		} catch (TimeoutException e) {
