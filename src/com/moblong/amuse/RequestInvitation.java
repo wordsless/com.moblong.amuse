@@ -32,9 +32,9 @@ public final class RequestInvitation extends HttpServlet {
 		Gson gson = new GsonBuilder()
 				    .setDateFormat("yyyy-MM-dd HH:mm:ss")
 				    .create();
-		Whistle<String> message = null;
+		Whistle message = null;
 		if(msg != null)
-			message = gson.fromJson(msg, new TypeToken<Whistle<String>>(){}.getType());
+			message = gson.fromJson(msg, new TypeToken<Whistle>(){}.getType());
 		
 		WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		
