@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.amuse.dto.DeviceDTO;
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")

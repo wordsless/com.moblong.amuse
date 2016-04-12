@@ -15,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.DetailsDTO;
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.VerifiableItem;
 
 @SuppressWarnings("serial")
@@ -30,7 +30,7 @@ public final class RequestDetails extends BasicServlet {
 		
 		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		
-		Account account = gson.fromJson(req.getParameter("account"), Account.class);
+		Contact account = gson.fromJson(req.getParameter("account"), Contact.class);
 		
 		DetailsDTO detailsDTO = context.getBean("DetailsDTO", DetailsDTO.class);
 		List<VerifiableItem> details = detailsDTO.reload(context, account.getUid());

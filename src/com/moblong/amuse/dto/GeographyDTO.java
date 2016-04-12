@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 
 public final class GeographyDTO {
 	
@@ -64,9 +64,9 @@ public final class GeographyDTO {
 		}
 	}	
 	
-	public List<Account> nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude, final double radius) {
+	public List<Contact> nearby(final ApplicationContext context, final String aid, final double latitude, final double longitude, final double radius) {
 		String sql = "SELECT base.aid, base.alias, base.telephone, base.registered, base.lastest, base.signature, base.ppid, base.type, base.uid, nearby.distance FROM t_account_base AS base, (SELECT aid, ST_Distance('POINT(? ?)', location) AS distance FROM t_location_realtime WHERE aid <> ? AND distance <= ? ORDER BY distance LIMIT 1000) AS nearby WHERE base.aid = nearby.aid";
-		List<Account> nearby = new ArrayList<Account>();
+		List<Contact> nearby = new ArrayList<Contact>();
 		DataSource ds = context.getBean("ds", DataSource.class);
 		Connection con = null;
 		PreparedStatement pstate = null;
@@ -82,13 +82,13 @@ public final class GeographyDTO {
 			pstate.execute();
 			rs = pstate.getResultSet();
 			while(rs.next()) {
-				Account account = new Account();
-				account = new Account();
+				Contact account = new Contact();
+				account = new Contact();
 				account.setId(rs.getString(1).trim());
 				account.setAlias(rs.getString(2).trim());
 				account.setTelephone(rs.getString(3).trim());
 				account.setRegistered(new java.util.Date(rs.getDate(4).getTime()));
-				account.setLast(new java.util.Date(rs.getDate(5).getTime()));
+				account.setLatest(new java.util.Date(rs.getDate(5).getTime()));
 				account.setSignature(rs.getString(6).trim());
 				account.setAvatar(rs.getString(7).trim());
 				account.setType(rs.getString(8));

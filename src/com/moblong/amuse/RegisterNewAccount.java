@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.amuse.dto.DeviceDTO;
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
@@ -33,7 +33,7 @@ public final class RegisterNewAccount extends HttpServlet {
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		try {
 			writer = resp.getWriter();
-			Account       account = gson.fromJson(req.getParameter("account"), Account.class);
+			Contact       account = gson.fromJson(req.getParameter("account"), Contact.class);
 			AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
 			accountDTO.update(context, account, req.getParameter("password"));
 			DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);

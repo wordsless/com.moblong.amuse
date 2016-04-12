@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.AccountDTO;
 import com.moblong.amuse.dto.DeviceDTO;
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.Device;
 
 @SuppressWarnings("serial")
@@ -33,10 +33,10 @@ public final class RegisterAnonymous extends BasicServlet {
 		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		final String aid  = UUID.randomUUID().toString().replace("-", "");
 		
-		Account account = gson.fromJson(req.getParameter("account"), Account.class);
+		Contact account = gson.fromJson(req.getParameter("account"), Contact.class);
 		account.setId(aid);
 		account.setRegistered(new Date(System.currentTimeMillis()));
-		account.setLast(new Date(System.currentTimeMillis()));
+		account.setLatest(new Date(System.currentTimeMillis()));
 		account.setSignature("TA什么都没有留下！");
 		
 		AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);

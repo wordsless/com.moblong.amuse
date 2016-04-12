@@ -15,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.AccountDTO;
-import com.moblong.flipped.model.Account;
+import com.moblong.flipped.model.Contact;
 
 @WebServlet(displayName="RequestAccount", name ="RequestAccount", urlPatterns = "/RequestAccount")
 public class RequestAccount extends HttpServlet {
@@ -28,7 +28,7 @@ public class RequestAccount extends HttpServlet {
 				  .create();
 		String aid = req.getParameter("aid");
 		AccountDTO dto = context.getBean("AccountDTO", AccountDTO.class);
-		Account account = dto.reload(context, aid);
+		Contact account = dto.reload(context, aid);
 		resp.setCharacterEncoding("UTF-8");
 		OutputStream output = resp.getOutputStream();
 		output.write(gson.toJson(account).getBytes("utf8"));
