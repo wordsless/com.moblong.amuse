@@ -14,7 +14,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.ContactDTO;
 import com.moblong.flipped.model.Contact;
 
 @WebServlet(displayName="RequestAccount", name ="RequestAccount", urlPatterns = "/RequestAccount")
@@ -27,7 +27,7 @@ public class RequestAccount extends HttpServlet {
 				  .setDateFormat("yyyy-MM-dd HH:mm:ss")
 				  .create();
 		String aid = req.getParameter("aid");
-		AccountDTO dto = context.getBean("AccountDTO", AccountDTO.class);
+		ContactDTO dto = context.getBean("AccountDTO", ContactDTO.class);
 		Contact account = dto.reload(context, aid);
 		resp.setCharacterEncoding("UTF-8");
 		OutputStream output = resp.getOutputStream();

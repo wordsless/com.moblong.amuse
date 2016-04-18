@@ -15,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.ContactDTO;
 import com.moblong.amuse.dto.DeviceDTO;
 import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.Device;
@@ -33,14 +33,13 @@ public final class RegisterAnonymous extends BasicServlet {
 		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		final String aid  = UUID.randomUUID().toString().replace("-", "");
 		
-		Contact account = gson.fromJson(req.getParameter("account"), Contact.class);
-		account.setId(aid);
-		account.setRegistered(new Date(System.currentTimeMillis()));
-		account.setLatest(new Date(System.currentTimeMillis()));
-		account.setSignature("TA什么都没有留下！");
+		Contact Contact = gson.fromJson(req.getParameter("account"), Contact.class);
+		Contact.setRegistered(new Date(System.currentTimeMillis()));
+		Contact.setLatest(new Date(System.currentTimeMillis()));
+		Contact.setSignature("TA什么都没有留下！");
 		
-		AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
-		accountDTO.save(context, UUID.randomUUID().toString().replace("-", ""), req.getParameter("password"), account);
+		ContactDTO contactDTO = context.getBean("ContactDTO", ContactDTO.class);
+		contactDTO.save(context, UUID.randomUUID().toString().replace("-", ""), req.getParameter("password"), Contact);
 		
 		Device  device  = gson.fromJson(req.getParameter("device"), Device.class);
 		DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
@@ -50,7 +49,7 @@ public final class RegisterAnonymous extends BasicServlet {
 		try {
 			resp.setCharacterEncoding("UTF-8");
 			writer = resp.getWriter();
-			writer.write(gson.toJson(account));
+			writer.write(gson.toJson(Contact));
 			writer.flush();
 			writer.close();
 			writer = null;

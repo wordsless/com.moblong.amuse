@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.ContactDTO;
 import com.moblong.amuse.dto.DetailsDTO;
 import com.moblong.flipped.model.VerifiableItem;
 
@@ -36,7 +36,7 @@ public final class SaveUserActivity  extends BasicServlet {
 			String aid  = req.getParameter("aid");
 			String data = req.getParameter("data");
 			List<VerifiableItem> details = gson.fromJson(data, new TypeToken<VerifiableItem>(){}.getType());
-			AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
+			ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
 			DetailsDTO detailsDTO = context.getBean("DetailsDTO", DetailsDTO.class);
 			String			  uid = accountDTO.lookforUserId(context, aid);
 			detailsDTO.save(context, uid, details);

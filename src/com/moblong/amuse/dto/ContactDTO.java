@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.moblong.flipped.model.Contact;
 
-public final class AccountDTO {
+public final class ContactDTO {
 
 	private static final int NUMBER_OF_PER_PAGE = 20;
 

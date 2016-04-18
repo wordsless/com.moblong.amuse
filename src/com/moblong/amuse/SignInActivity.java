@@ -15,7 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.moblong.amuse.dto.AccountDTO;
+import com.moblong.amuse.dto.ContactDTO;
 import com.moblong.flipped.model.Contact;
 
 @SuppressWarnings("serial")
@@ -32,7 +32,7 @@ public final class SignInActivity extends HttpServlet {
 		String password  = req.getParameter("pwd");
 		
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		AccountDTO accountDTO = context.getBean("AccountDTO", AccountDTO.class);
+		ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
 		Contact account = accountDTO.signIn(context, cellphone, password);
 		
 		OutputStream writer = resp.getOutputStream();
