@@ -27,7 +27,7 @@ public class RequestAccount extends HttpServlet {
 				  .setDateFormat("yyyy-MM-dd HH:mm:ss")
 				  .create();
 		String aid = req.getParameter("aid");
-		ContactDTO dto = context.getBean("AccountDTO", ContactDTO.class);
+		ContactDTO dto = context.getBean("ContactDTO", ContactDTO.class);
 		Contact account = dto.reload(context, aid);
 		resp.setCharacterEncoding("UTF-8");
 		OutputStream output = resp.getOutputStream();

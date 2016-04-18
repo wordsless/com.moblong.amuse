@@ -32,7 +32,7 @@ public final class SignInActivity extends HttpServlet {
 		String password  = req.getParameter("pwd");
 		
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
+		ContactDTO accountDTO = context.getBean("ContactDTO", ContactDTO.class);
 		Contact account = accountDTO.signIn(context, cellphone, password);
 		
 		OutputStream writer = resp.getOutputStream();

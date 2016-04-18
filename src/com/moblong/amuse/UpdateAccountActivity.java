@@ -32,11 +32,11 @@ public final class UpdateAccountActivity extends HttpServlet {
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		try {
 			writer = resp.getOutputStream();
-			Contact       account = gson.fromJson(req.getParameter("account"), Contact.class);
-			ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
-			accountDTO.update(context, account, req.getParameter("password"));
+			Contact       contact = gson.fromJson(req.getParameter("account"), Contact.class);
+			ContactDTO contactDTO = context.getBean("ContactDTO", ContactDTO.class);
+			contactDTO.update(context, contact, req.getParameter("password"));
 			
-			writer.write(gson.toJson(account).getBytes("UTF-8"));
+			writer.write(gson.toJson(contact).getBytes("UTF-8"));
 			writer.flush();
 			writer.close();
 			writer = null;

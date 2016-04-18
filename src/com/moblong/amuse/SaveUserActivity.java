@@ -36,7 +36,7 @@ public final class SaveUserActivity  extends BasicServlet {
 			String aid  = req.getParameter("aid");
 			String data = req.getParameter("data");
 			List<VerifiableItem> details = gson.fromJson(data, new TypeToken<VerifiableItem>(){}.getType());
-			ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
+			ContactDTO accountDTO = context.getBean("ContactDTO", ContactDTO.class);
 			DetailsDTO detailsDTO = context.getBean("DetailsDTO", DetailsDTO.class);
 			String			  uid = accountDTO.lookforUserId(context, aid);
 			detailsDTO.save(context, uid, details);

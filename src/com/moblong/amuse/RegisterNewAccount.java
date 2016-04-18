@@ -34,7 +34,7 @@ public final class RegisterNewAccount extends HttpServlet {
 		try {
 			writer = resp.getWriter();
 			Contact       account = gson.fromJson(req.getParameter("account"), Contact.class);
-			ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
+			ContactDTO accountDTO = context.getBean("ContactDTO", ContactDTO.class);
 			accountDTO.update(context, account, req.getParameter("password"));
 			DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
 			Device device = deviceDTO.reload(context, account.getId());

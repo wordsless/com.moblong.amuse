@@ -32,7 +32,7 @@ public final class DeleteAnonymous extends BasicServlet {
 		
 		final String aid  = UUID.randomUUID().toString().replace("-", "");
 		
-		ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
+		ContactDTO accountDTO = context.getBean("ContactDTO", ContactDTO.class);
 		accountDTO.delete(context, aid);
 		
 		PrintWriter writer = null;

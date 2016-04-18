@@ -30,7 +30,7 @@ public final class RegisterThridPartyAccount extends HttpServlet {
 		PrintWriter writer = resp.getWriter();
 		
 		Contact       account = gson.fromJson(req.getParameter("account"), Contact.class);
-		ContactDTO accountDTO = context.getBean("AccountDTO", ContactDTO.class);
+		ContactDTO accountDTO = context.getBean("ContactDTO", ContactDTO.class);
 		accountDTO.update(context, account, null);
 		
 		DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
