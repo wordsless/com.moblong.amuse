@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="amuse" default="war">
+<project name="amuse" default="sumbit">
 	<property name="src" value="src" />
 	<property name="WebContent" value="WebContent" />
 	<property name="dist" value="dist" />
@@ -32,19 +32,19 @@
 	</target>
 
 	<!-- 编译java源文件并拷贝到相应的文件夹 -->
-	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${dist}/${classDest}" target="1.8"
+	<target name="compile">
+		<javac destdir="${dist}/${classDest}" target="1.8"
 			classpathref="build-classpath" encoding="${source-encoding}" debug="true"
 			debuglevel="source,lines,vars">
+			<src path="${src}"/>
+			<src path="C:\Users\强\Documents\workspace\com.moblong.models\src"/>
 		</javac>
 	</target>
 
 	<!--拷贝webcontent文件到相应的文件夹 -->
 	<target name="copy">
 		<copy todir="${dist}/${warDest}">
-			<fileset dir="${WebContent}">
-				<exclude name="**/*.jar" />
-			</fileset>
+			<fileset dir="${WebContent}"/>
 		</copy>
 		<copy todir="${dist}/${classDest}">
 			<fileset dir="${src}">
@@ -64,14 +64,19 @@
 	</target>
 
 	<!--打包 -->
-	<target name="war" depends="compile, copy">
+	<target name="war">
 		<war destfile="${dist}/${warName}" webxml="${WebContent}/WEB-INF/web.xml">
 			<fileset dir="${dist}/${warDest}" />
-			<!-- <lib dir="${WebContent}/WEB-INF/lib"/> -->
-			<classes dir="${dist}/${classDest}"></classes>
+			<lib dir="${WebContent}/WEB-INF/lib"/>
+			<classes dir="${dist}/${classDest}"/>
 		</war>
-		<delete dir="${dist}/${warDest}"></delete>
-		<delete dir="${dist}/${classDest}"></delete>
+		<delete dir="${dist}/${warDest}"/>
+		<delete dir="${dist}/${classDest}"/>
 	</target>
 
+	<!-- 上传 -->
+	<target name="sumbit" depends="init, compile, copy, war">
+	    <sshexec host="www.tlthsc.com" username="flipped" password="zap##123" command="rm -f apache-tomcat-9.0.0.M4/webapps/amuse.war"/>
+	    <scp file="${dist}" todir="flipped:zap##123@www.tlthsc.com:/home/flipped/apache-tomcat-9.0.0.M4/webapps/"/>
+	</target>
 </project>

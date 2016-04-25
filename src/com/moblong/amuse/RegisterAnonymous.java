@@ -1,6 +1,7 @@
 package com.moblong.amuse;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.UUID;
@@ -31,25 +32,25 @@ public final class RegisterAnonymous extends BasicServlet {
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		
 		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-		final String aid  = UUID.randomUUID().toString().replace("-", "");
+		//final String aid  = UUID.randomUUID().toString().replace("-", "");
 		
-		Contact Contact = gson.fromJson(req.getParameter("account"), Contact.class);
-		Contact.setRegistered(new Date(System.currentTimeMillis()));
-		Contact.setLatest(new Date(System.currentTimeMillis()));
-		Contact.setSignature("TA什么都没有留下！");
+		Contact anonymous = gson.fromJson(req.getParameter("account"), Contact.class);
+		anonymous.setRegistered(new Date(System.currentTimeMillis()));
+		anonymous.setLatest(new Date(System.currentTimeMillis()));
+		anonymous.setSignature("TA什么都没有留下！");
 		
 		ContactDTO contactDTO = context.getBean("ContactDTO", ContactDTO.class);
-		contactDTO.save(context, UUID.randomUUID().toString().replace("-", ""), req.getParameter("password"), Contact);
+		String uid = UUID.randomUUID().toString().replace("-", "");
+		contactDTO.save(context, uid, req.getParameter("password"), anonymous);
 		
-		Device  device  = gson.fromJson(req.getParameter("device"), Device.class);
+		Device  device = gson.fromJson(req.getParameter("device"), Device.class);
 		DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
-		deviceDTO.save(context, aid, device);
+		deviceDTO.save(context, anonymous.getId(), device);
 		
-		PrintWriter writer = null;
+		OutputStream writer = null;
 		try {
-			resp.setCharacterEncoding("UTF-8");
-			writer = resp.getWriter();
-			writer.write(gson.toJson(Contact));
+			writer = resp.getOutputStream();
+			writer.write(gson.toJson(anonymous).getBytes("UTF-8"));
 			writer.flush();
 			writer.close();
 			writer = null;
