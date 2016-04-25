@@ -30,10 +30,10 @@ public final class RequestDetails extends BasicServlet {
 		
 		final Gson   gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		
-		Contact account = gson.fromJson(req.getParameter("account"), Contact.class);
+		String uid = req.getParameter("uid");
 		
 		DetailsDTO detailsDTO = context.getBean("DetailsDTO", DetailsDTO.class);
-		List<VerifiableItem> details = detailsDTO.reload(context, account.getUid());
+		List<VerifiableItem> details = detailsDTO.reload(context, uid);
 		
 		OutputStream output = null;
 		try {

@@ -11,12 +11,27 @@ import javax.sql.DataSource;
 
 import org.springframework.context.ApplicationContext;
 
-import com.moblong.flipped.model.Constants;
 import com.moblong.flipped.model.Indicator;
 import com.moblong.flipped.model.VerifiableItem;
 
 public final class DetailsDTO {
 
+	public void init(final ApplicationContext context, final String uid) {
+		List<VerifiableItem> self = new ArrayList<VerifiableItem>(16);
+		self.add(new VerifiableItem(uid, new Indicator<String>(0,  "所在城市", ""),  false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(1,  "全名",    ""),  false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(2,  "性别", "女"), false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(3,  "身高", Integer.toString(170)), false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(4,  "职业", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(5,  "收入", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(6,  "民族", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(7,  "学历", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(8,  "购房", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(9,  "购车", Integer.toString(2)),   false));
+		self.add(new VerifiableItem(uid, new Indicator<String>(10, "婚姻", Integer.toString(2)),   false));
+		save(context, uid, self);
+	}
+	
 	public void save(final ApplicationContext context, final String uid, final List<VerifiableItem> details) {
 		boolean			  exist = false;
 		ResultSet			 rs = null;
@@ -48,19 +63,13 @@ public final class DetailsDTO {
 			
 			pstat = con.prepareStatement("INSERT INTO t_details_base(uid, iid, title, content, condition) VALUES(?, ?, ?, ?, ?)");
 			for(VerifiableItem item : details) {
-				Indicator<?> indicator = item.getIndicator();
+				Indicator<String> indicator = item.getIndicator();
 				pstat.setString(1, uid);
-				pstat.setInt(2, indicator.getId());
+				pstat.setInt(2,    indicator.getId());
 				pstat.setString(3, indicator.getTitle());
-				if(indicator.getId() == Constants.INDEX_CITY || indicator.getId() == Constants.INDEX_FULLNAME) {
-					pstat.setString(4, (String) indicator.getContent());
-				} else if(indicator.getId() == Constants.INDEX_SEX) {
-					pstat.setString(4, Boolean.toString((Boolean) indicator.getContent()));
-				} else {
-					pstat.setString(4, Integer.toString((Integer) indicator.getContent()));
-				}
-				pstat.setInt(5, indicator.isVisible() ? 1 : 0);
-				pstat.setInt(6, item.isVerified() ? 1 : 0);
+				pstat.setString(4, indicator.getContent());
+				pstat.setInt(5,    indicator.isVisible() ? 1 : 0);
+				pstat.setInt(6,    item.isVerified() ? 1 : 0);
 				pstat.addBatch();
 			}
 			pstat.executeBatch();
@@ -72,7 +81,6 @@ public final class DetailsDTO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			
 			if(pstat != null) {
 				try {
 					pstat.close();
@@ -108,7 +116,7 @@ public final class DetailsDTO {
 			rs = pstat.getResultSet();
 			while(rs.next()) {
 				int iid = rs.getInt("iid");
-				user.add(new VerifiableItem(new Indicator<String>(iid, rs.getString("title"), rs.getString("content")), rs.getInt("condition") > 0));
+				user.add(new VerifiableItem(uid, new Indicator<String>(iid, rs.getString("title"), rs.getString("content")), rs.getInt("condition") > 0));
 			}
 			rs.close();
 			rs = null;

@@ -24,7 +24,7 @@ public final class ContactDTO {
 		try {
 			con = ds.getConnection();
 			pstat = con.prepareStatement("INSERT INTO t_account_base(uid, aid, alias, pwd, signature, telephone, latitude, longitude, registered, lastest) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			pstat.setString(1, uid.trim());
+			pstat.setString(1, uid);
 			
 			String aid = account.getId();
 			if(aid != null)

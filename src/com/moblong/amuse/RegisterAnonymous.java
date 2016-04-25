@@ -17,6 +17,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moblong.amuse.dto.ContactDTO;
+import com.moblong.amuse.dto.DetailsDTO;
 import com.moblong.amuse.dto.DeviceDTO;
 import com.moblong.flipped.model.Contact;
 import com.moblong.flipped.model.Device;
@@ -38,10 +39,13 @@ public final class RegisterAnonymous extends BasicServlet {
 		anonymous.setRegistered(new Date(System.currentTimeMillis()));
 		anonymous.setLatest(new Date(System.currentTimeMillis()));
 		anonymous.setSignature("TA什么都没有留下！");
+		anonymous.setUid(UUID.randomUUID().toString().replace("-", ""));
 		
 		ContactDTO contactDTO = context.getBean("ContactDTO", ContactDTO.class);
-		String uid = UUID.randomUUID().toString().replace("-", "");
-		contactDTO.save(context, uid, req.getParameter("password"), anonymous);
+		contactDTO.save(context, anonymous.getUid(), req.getParameter("password"), anonymous);
+		
+		DetailsDTO detailsDTO = context.getBean("DetailsDTO", DetailsDTO.class);
+		detailsDTO.init(context, anonymous.getUid());
 		
 		Device  device = gson.fromJson(req.getParameter("device"), Device.class);
 		DeviceDTO deviceDTO = context.getBean("DeviceDTO", DeviceDTO.class);
