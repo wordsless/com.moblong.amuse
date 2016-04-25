@@ -108,12 +108,7 @@ public final class DetailsDTO {
 			rs = pstat.getResultSet();
 			while(rs.next()) {
 				int iid = rs.getInt("iid");
-				if(iid == Constants.INDEX_CITY || iid == Constants.INDEX_FULLNAME)
-					user.add(new VerifiableItem(new Indicator<String>(iid, rs.getString("title"), rs.getString("content")), rs.getInt("condition") > 0));
-				else if(iid == Constants.INDEX_SEX)
-					user.add(new VerifiableItem(new Indicator<Boolean>(iid, rs.getString("title"), Boolean.parseBoolean(rs.getString("content"))), rs.getInt("condition") > 0));
-				else
-					user.add(new VerifiableItem(new Indicator<Integer>(iid, rs.getString("title"), Integer.parseInt(rs.getString("content"))), rs.getInt("condition") > 0));
+				user.add(new VerifiableItem(new Indicator<String>(iid, rs.getString("title"), rs.getString("content")), rs.getInt("condition") > 0));
 			}
 			rs.close();
 			rs = null;
